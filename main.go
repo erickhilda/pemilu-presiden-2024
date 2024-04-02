@@ -47,7 +47,6 @@ func main() {
 	tableDocs.Each(func(i int, table *goquery.Selection) {
 		if i == 1 {
 			table.Find("tr").Each(func(i int, tr *goquery.Selection) {
-				// create empty slice
 				row := make([]string, 0)
 				tr.Find("th").Each(func(j int, th *goquery.Selection) {
 					row = append(row, html.UnescapeString(th.Text()))
@@ -60,17 +59,16 @@ func main() {
 			})
 		}
 	})
-	// remove the first four rows
-	// clean the candidate info header
+
 	data = data[4:]
-	// check for the data that have item more that 8
-	// if true, remove the first item
 	for i := 0; i < len(data); i++ {
 		if len(data[i]) > 8 {
 			data[i] = data[i][1:]
 		}
 	}
-	// append data on the first row
-	data[0] = []string{"province", "votes", "perc", "votes", "perc", "votes", "perc", "total"}
+	headers := []string{"province", "total", "perc", "votes", "perc", "votes", "perc", "total"}
+
+	data = append([][]string{headers}, data...)
+
 	writer.WriteAll(data)
 }
